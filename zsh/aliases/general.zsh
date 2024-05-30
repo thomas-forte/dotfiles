@@ -1,7 +1,15 @@
 #!/bin/zsh
 
-alias py='source venv/bin/activate'
-alias _py='deactivate'
+# alias py='source venv/bin/activate'
+# alias _py='deactivate'
+
+py () {
+  if (( ${+VIRTUAL_ENV} )); then
+    deactivate
+  else
+    source venv/bin/activate
+  fi
+}
 
 alias gmm='git commit -m'
 

@@ -39,3 +39,6 @@ export NVM_DIR="$XDG_DATA_HOME/nvm"
 if hash starship 2> /dev/null; then
   eval "$(starship init zsh)"
 fi
+
+export CLICOLOR=1
+export GPG_TTY=$(tty)

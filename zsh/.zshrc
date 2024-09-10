@@ -19,6 +19,7 @@ if [[ -d "${ZDOTDIR}/aliases" ]]; then
   source ${ZDOTDIR}/aliases/general.zsh
   source ${ZDOTDIR}/aliases/directories.zsh
   source ${ZDOTDIR}/aliases/git.zsh
+  source ${ZDOTDIR}/aliases/aws.zsh
 fi
 
 # import plugins

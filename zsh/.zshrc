@@ -1,6 +1,9 @@
 #!/bin/zsh
 
-# if OSX
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# OSX specific configurations
 if [ "$(uname -s)" = "Darwin" ]; then
 
   # Add Brew to path, if it's installed
@@ -8,7 +11,7 @@ if [ "$(uname -s)" = "Darwin" ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
 
-  # If using iTerm, import the shell integration if availible
+  # If using iTerm, import the shell integration if available
   if [[ -f "${ZDOTDIR}/.iterm2_shell_integration.zsh" ]]; then
     source "${ZDOTDIR}/.iterm2_shell_integration.zsh"
   fi
@@ -22,8 +25,9 @@ if [[ -d "${ZDOTDIR}/aliases" ]]; then
   source ${ZDOTDIR}/aliases/aws.zsh
 fi
 
-# import plugins
+# Import plugins
 if [[ -d "${ZDOTDIR}/plugins" ]]; then
+  # Setup Antigen, and import plugins
   source "${ZDOTDIR}/plugins/setup-antigen.zsh"
   source "${ZDOTDIR}/plugins/import-plugins.zsh"
 fi
@@ -33,6 +37,7 @@ if [[ -d "${ZDOTDIR}/lib" ]]; then
   source "${ZDOTDIR}/lib/history.zsh"
 fi
 
+# Configure nvm
 export NVM_DIR="$XDG_DATA_HOME/nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 
@@ -43,3 +48,4 @@ fi
 
 export CLICOLOR=1
 export GPG_TTY=$(tty)
+

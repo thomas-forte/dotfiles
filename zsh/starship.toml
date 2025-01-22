@@ -9,8 +9,10 @@ $username\
 $hostname\
 $jobs\
 $directory\
+$aws\
 $git_branch\
 $git_status\
+$nodejs\
 $python\
 $sudo\
 $status\
@@ -26,8 +28,17 @@ format = '@[$hostname]($style)'
 [sudo]
 disabled = false
 
+[aws]
+format = '[($profile )(\($region\) )(\[$duration\] )]($style)'
+[aws.region_aliases]
+us-east-2 = ''
+
 [git_branch]
 format = '[\($branch(:$remote_branch)\) ]($style)'
 
 [python]
 format = '[(\($virtualenv\) )]($style)'
+
+[nodejs]
+format = '[\(($version)\) ]($style)'
+version_format = 'v${major}.${minor}'

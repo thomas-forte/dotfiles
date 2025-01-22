@@ -1,0 +1,6 @@
+[user]
+	name = Thomas Forte
+[init]
+	defaultBranch = master
+[diff]
+	colorMoved = zebra

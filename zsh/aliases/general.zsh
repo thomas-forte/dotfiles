@@ -1,8 +1,5 @@
 #!/bin/zsh
 
-# alias py='source venv/bin/activate'
-# alias _py='deactivate'
-
 py () {
   if (( ${+VIRTUAL_ENV} )); then
     deactivate
@@ -17,3 +14,5 @@ alias gmm='git commit -m'
 if hash bat 2> /dev/null; then
   alias cat='bat'
 fi
+
+alias weather="curl 'wttr.in/Cleveland?0'"

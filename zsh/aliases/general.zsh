@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+# ssh
 alias sshconfig="cat $HOME/.ssh/config"
 alias copyssh="pbcopy < $HOME/.ssh/id_ed25519.pub"
 
@@ -12,19 +13,10 @@ py () {
   fi
 }
 
-# git
-alias gmm='git commit -m'
-
 # alias over cat with bat
 if hash bat 2> /dev/null; then
   alias cat='bat'
 fi
-
-# directories
-alias config="cd $XDG_CONFIG_HOME"
-alias library="cd $HOME/Library"
-alias github="cd $HOME/github"
-alias work="cd $HOME/github/_work"
 
 # fun
 alias weather="curl 'wttr.in/Cleveland?0'"

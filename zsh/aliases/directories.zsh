@@ -31,7 +31,15 @@ _mkcd() {
 }
 
 # List directory contents
-alias lsa='ls -lah'
-alias l='ls -lah'
-alias ll='ls -lh'
-alias la='ls -lAh'
+alias l='ls'
+alias ll='ls -lha' # List all files with detailed info
+alias lr='ls -R' # List files in sub-directories, recursively
+alias lf='ls -A | grep' # Use grep to find files
+alias lc='find . -type f | wc -l' # Shows number of files
+alias ld='ls -l | grep "^d"' # List directories only
+
+# Direct navigation
+alias config="cd $XDG_CONFIG_HOME"
+alias library="cd $HOME/Library"
+alias github="cd $HOME/github"
+alias work="cd $HOME/github/_work"

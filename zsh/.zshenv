@@ -10,6 +10,7 @@ export XDG_CACHE_HOME="${HOME}/.cache";
 
 # terminal configs
 export LANG='en_US.UTF-8';
+export TZ='America/New_York'
 export EDITOR="nano"
 export PAGER="less"
 

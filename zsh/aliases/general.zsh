@@ -8,8 +8,12 @@ alias copyssh="pbcopy < $HOME/.ssh/id_ed25519.pub"
 py () {
   if (( ${+VIRTUAL_ENV} )); then
     deactivate
-  else
+  elif [[ -d venv ]]; then
     source venv/bin/activate
+  elif [[ -d .venv ]]; then
+    source .venv/bin/activate
+  else
+    echo "I only work with venv and .venv!"
   fi
 }
 

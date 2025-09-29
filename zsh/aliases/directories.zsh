@@ -25,11 +25,6 @@ mkcd() {
   mkdir -p "$1" && cd "$1" || return 1
 }
 
-_mkcd() {
-  #compdef mkc
-  _files -W "$1" -/
-}
-
 # List directory contents
 alias l='ls'
 alias ll='ls -lha' # List all files with detailed info
@@ -37,9 +32,3 @@ alias lr='ls -R' # List files in sub-directories, recursively
 alias lf='ls -A | grep' # Use grep to find files
 alias lc='find . -type f | wc -l' # Shows number of files
 alias ld='ls -l | grep "^d"' # List directories only
-
-# Direct navigation
-alias config="cd $XDG_CONFIG_HOME"
-alias library="cd $HOME/Library"
-alias github="cd $HOME/github"
-alias work="cd $HOME/github/_work"

@@ -1,21 +1,14 @@
 #!/bin/zsh
 
-# ssh
+# Direct navigation
+alias config="cd $XDG_CONFIG_HOME"
 alias sshconfig="cat $HOME/.ssh/config"
-alias copyssh="pbcopy < $HOME/.ssh/id_ed25519.pub"
+alias library="cd $HOME/Library"
+alias github="cd $HOME/github"
+alias work="cd $HOME/github/_work"
 
-# python
-py () {
-  if (( ${+VIRTUAL_ENV} )); then
-    deactivate
-  elif [[ -d venv ]]; then
-    source venv/bin/activate
-  elif [[ -d .venv ]]; then
-    source .venv/bin/activate
-  else
-    echo "I only work with venv and .venv!"
-  fi
-}
+# ssh
+alias copyssh="pbcopy < $HOME/.ssh/id_ed25519.pub"
 
 # alias over cat with bat
 if hash bat 2> /dev/null; then

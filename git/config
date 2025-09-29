@@ -4,3 +4,7 @@
 	defaultBranch = master
 [diff]
 	colorMoved = zebra
+[gpg]
+	program = /opt/homebrew/bin/gpg
+[commit]
+	gpgsign = true

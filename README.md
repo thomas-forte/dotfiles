@@ -4,15 +4,10 @@ Always a work in progress
 
 ## Setup
 
-1. Install homebrew
-2. `brew install --cask font-fira-code-nerd-font`
-3. `brew install bat starship tmux`
-4. `ln -s ./zsh/.zshenv ~/.zshenv`
-5. `ln -s ./zsh ~/.config/zsh`
-6. `ln -s ./git ~/.config/git`
-7. `ln -s ./bat.conf ~/.config/bat.conf`
-8. Update these config files:
-    - `git/config`
+1. Update the following files with your own info:
+    - `git/config` - Specify the user section
+2. Make sure to install homebrew
+3. `./setup`
 
 ## Other Installs
 

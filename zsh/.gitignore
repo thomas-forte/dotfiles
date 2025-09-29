@@ -1,3 +1,4 @@
 antigen
 *.zwc
 .zcompdump
+.zsh_sessions

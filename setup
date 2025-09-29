@@ -1,0 +1,36 @@
+#! /bin/zsh
+
+installs() {
+    brew install --cask font-fira-code-nerd-font
+    brew install bat starship tmux
+}
+
+setup_links() {
+    ln -s "$(pwd)/zsh/.zshenv" ~/.zshenv
+    ln -s "$(pwd)/zsh" ~/.config/zsh
+    ln -s "$(pwd)/git/config" ~/.config/git/config
+    ln -s "$(pwd)/bat.conf" ~/.config/bat.conf
+}
+
+echo "================================================"
+echo "= This script will download and install some   ="
+echo "= cool stuff and create symlinks for your      ="
+echo "= dotfiles in this repo.                       ="
+echo "================================================"
+
+
+echo "Do you wish to continue to the download and install?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) installs; break;;
+        No ) exit;;
+    esac
+done
+
+echo "Do you wish to continue to the setup of symlinks?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) setup_links; break;;
+        No ) exit;;
+    esac
+done

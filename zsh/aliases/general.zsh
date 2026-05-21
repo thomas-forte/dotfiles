@@ -4,8 +4,6 @@
 alias config="cd $XDG_CONFIG_HOME"
 alias sshconfig="cat $HOME/.ssh/config"
 alias library="cd $HOME/Library"
-alias github="cd $HOME/github"
-alias work="cd $HOME/github/_work"
 
 # ssh
 alias copyssh="pbcopy < $HOME/.ssh/id_ed25519.pub"

@@ -24,3 +24,13 @@ alias gcb='git checkout -b'
 alias gcB='git checkout -B'
 
 alias gcl='git clone --recurse-submodules'
+
+function github() {
+  if (( $# )); then
+    cd "$HOME/github/$1" || return
+  else
+    cd "$HOME/github" || return
+  fi
+}
+
+alias work="cd $HOME/github/_work"

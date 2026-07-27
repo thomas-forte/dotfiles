@@ -15,12 +15,14 @@ sendssh() {
     new)  _sendssh_new "${@:2}" ;;
     send) _sendssh_send ;;
     get)  _sendssh_get ;;
+    copy) _sendssh_copy ;;
     *)
       echo "usage: sendssh <command>"
       echo "  new <name> [-s]  create an ed25519 key pair at ~/.ssh/<hostname>_<name>_ed25519"
       echo "                   (-s/--send uploads the public key after creating it)"
       echo "  send             upload local public keys to \$SEND_SSH"
       echo "  get              pull shared public keys into ${SENDSSH_LOCAL_FILE}"
+      echo "  copy             copy a local public key to the clipboard"
       return 1
       ;;
   esac
@@ -53,27 +55,52 @@ _sendssh_new() {
 _sendssh_send() {
   _sendssh_env || return 1
 
-  local -a pubs
-  pubs=(~/.ssh/*.pub(N))
-  if (( $#pubs == 0 )); then
-    echo "no public keys found in ~/.ssh (try 'sendssh new <name>')"
-    return 1
-  fi
-
-  echo "select keys to upload to ${SEND_SSH}:${SENDSSH_REMOTE_FILE}"
-  local -a idx
-  idx=("${(f)$(_sendssh_select "${pubs[@]:t}")}") || return 1
-  idx=(${idx:#})
-  if (( $#idx == 0 )); then
+  local -a files
+  files=("${(f)$(_sendssh_pick_pubs "select keys to upload to ${SEND_SSH}:${SENDSSH_REMOTE_FILE}")}") || return 1
+  files=(${files:#})
+  if (( $#files == 0 )); then
     echo "nothing selected"
     return 0
   fi
 
-  local -a files
-  local i
-  for i in "${idx[@]}"; do files+=("${pubs[i]}"); done
-
   _sendssh_upload "${files[@]}"
+}
+
+_sendssh_copy() {
+  local file
+  file="$(_sendssh_pick_pubs -1 "select a key to copy to the clipboard")" || return 1
+  if [[ -z "$file" ]]; then
+    echo "nothing selected"
+    return 0
+  fi
+
+  # $(< file) drops the trailing newline, -n avoids adding one back
+  print -rn -- "$(< "$file")" | pbcopy
+  echo "copied ${file:t} to the clipboard"
+}
+
+# pick public keys from ~/.ssh, prints the chosen file paths.
+# pass -1 as the first arg for single-choice mode.
+_sendssh_pick_pubs() {
+  local -a flags
+  if [[ "$1" == "-1" ]]; then
+    flags=(-1)
+    shift
+  fi
+
+  local -a pubs idx
+  pubs=(~/.ssh/*.pub(N))
+  if (( $#pubs == 0 )); then
+    echo "no public keys found in ~/.ssh (try 'sendssh new <name>')" >&2
+    return 1
+  fi
+
+  echo "$1" >&2
+  idx=("${(f)$(_sendssh_select $flags "${pubs[@]:t}")}") || return 1
+  idx=(${idx:#})
+
+  local i
+  for i in "${idx[@]}"; do print -r -- "${pubs[i]}"; done
 }
 
 # append the given public key files to the remote data file,
@@ -164,7 +191,15 @@ _sendssh_sync_authorized() {
 # Interactive checkbox picker over the given labels, prints the selected
 # indices (1-based, one per line) to stdout.
 # Controls: arrows or j/k to move, space to toggle, enter to confirm, q to cancel.
+# Pass -1 as the first arg for single-choice mode: no checkboxes, and
+# space or enter picks the highlighted row.
 _sendssh_select() {
+  local single=0
+  if [[ "$1" == "-1" ]]; then
+    single=1
+    shift
+  fi
+
   local -a opts=("$@") marks=()
   local cur=1 i key
   for i in {1..$#opts}; do marks[i]=0; done
@@ -183,8 +218,17 @@ _sendssh_select() {
     case "$key" in
       k) (( cur > 1 )) && (( cur-- )) ;;
       j) (( cur < $#opts )) && (( cur++ )) ;;
-      ' ') (( marks[cur] = ! marks[cur] )) ;;
-      $'\n'|$'\r') break ;;
+      ' ')
+        if (( single )); then
+          marks[cur]=1
+          break
+        fi
+        (( marks[cur] = ! marks[cur] ))
+        ;;
+      $'\n'|$'\r')
+        (( single )) && marks[cur]=1
+        break
+        ;;
       q) print -n '\e[?25h' > /dev/tty; return 1 ;;
     esac
     print -n "\e[${#opts}A" > /dev/tty
@@ -198,13 +242,14 @@ _sendssh_select() {
   return 0
 }
 
-# renders the picker, relies on zsh dynamic scoping for opts/marks/cur
+# renders the picker, relies on zsh dynamic scoping for opts/marks/cur/single
 _sendssh_draw() {
   local i box ptr
   for i in {1..$#opts}; do
-    box="[ ]"; ptr="  "
-    (( marks[i] )) && box="[x]"
+    box="[ ] "; ptr="  "
+    (( single )) && box=""
+    (( marks[i] )) && box="[x] "
     (( i == cur )) && ptr="> "
-    print -r -- $'\e[2K'"${ptr}${box} ${opts[i]}" > /dev/tty
+    print -r -- $'\e[2K'"${ptr}${box}${opts[i]}" > /dev/tty
   done
 }

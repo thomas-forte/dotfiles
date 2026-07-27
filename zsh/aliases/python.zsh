@@ -11,3 +11,7 @@ py () {
     echo "I only work with venv and .venv!"
   fi
 }
+
+_py() {
+  "to activate or not to activate, that is the question..."
+}

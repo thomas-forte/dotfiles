@@ -22,4 +22,5 @@ export STARSHIP_CONFIG="${ZDOTDIR}/starship.toml"
 # app config
 export LESSHISTFILE="-" # Disable less history.
 export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat.conf"
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
 # export GIT_CONFIG_GLOBAL="${XDG_CONFIG_HOME}/git/config"

@@ -24,6 +24,7 @@ if [[ -d "${ZDOTDIR}/aliases" ]]; then
   source ${ZDOTDIR}/aliases/git.zsh
   source ${ZDOTDIR}/aliases/python.zsh
   source ${ZDOTDIR}/aliases/aws.zsh
+  source ${ZDOTDIR}/aliases/sendssh.zsh
 fi
 
 # Import plugins

@@ -23,4 +23,7 @@ export STARSHIP_CONFIG="${ZDOTDIR}/starship.toml"
 export LESSHISTFILE="-" # Disable less history.
 export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat.conf"
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
+export SEND_SSH=""
+export SEND_SSH_USER=""
+export SEND_SSH_ID=""
 # export GIT_CONFIG_GLOBAL="${XDG_CONFIG_HOME}/git/config"

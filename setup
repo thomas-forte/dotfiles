@@ -5,11 +5,18 @@ installs() {
     brew install bat starship tmux
 }
 
+optional_installs() {
+    brew install --cask session-manager-plugin
+    brew install awscli curl fish imagemagick nvm python3 redis tmux wget
+    brew install gpg2 gnupg pinentry-mac
+}
+
 setup_links() {
     ln -s "$(pwd)/zsh/.zshenv" ~/.zshenv
     ln -s "$(pwd)/zsh" ~/.config/zsh
     ln -s "$(pwd)/git/config" ~/.config/git/config
     ln -s "$(pwd)/bat.conf" ~/.config/bat.conf
+    ln -s "$(pwd)/sendssh/data" ~/.local/share/sendssh/data
 }
 
 echo "================================================"
@@ -23,6 +30,14 @@ echo "Do you wish to continue to the download and install?"
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) installs; break;;
+        No ) exit;;
+    esac
+done
+
+echo "Do you wish to continue to the optional installs?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) optional_installs; break;;
         No ) exit;;
     esac
 done

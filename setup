@@ -12,10 +12,10 @@ optional_installs() {
 }
 
 setup_links() {
-    mkdir -p ~/.config/git ~/.local/share/sendssh
+    mkdir -p ~/.config ~/.local/share/sendssh
     ln -sfn "$(pwd)/zsh/.zshenv" ~/.zshenv
     ln -sfn "$(pwd)/zsh" ~/.config/zsh
-    ln -sfn "$(pwd)/git/config" ~/.config/git/config
+    ln -sfn "$(pwd)/git" ~/.config/git
     ln -sfn "$(pwd)/bat.conf" ~/.config/bat.conf
     ln -sfn "$(pwd)/sendssh/data" ~/.local/share/sendssh/data
 }

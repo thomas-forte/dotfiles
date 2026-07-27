@@ -5,9 +5,6 @@ alias config="cd $XDG_CONFIG_HOME"
 alias sshconfig="cat $HOME/.ssh/config"
 alias library="cd $HOME/Library"
 
-# ssh
-alias copyssh="pbcopy < $HOME/.ssh/id_ed25519.pub"
-
 # alias over cat with bat
 if hash bat 2> /dev/null; then
   alias cat='bat'

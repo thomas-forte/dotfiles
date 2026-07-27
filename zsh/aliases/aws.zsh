@@ -2,7 +2,7 @@
 
 aws_select() {
     local PS3='Choose your profile: '
-    local profiles=($(cat ~/.aws/config | perl -n -e'/\[profile ([A-z]+)]/ && print "$1 "') "(u)nset" "(q)uit")
+    local profiles=($(cat ~/.aws/config | perl -n -e'/\[profile ([\w-]+)]/ && print "$1 "') "(u)nset" "(q)uit")
 
     local length=${#profiles[@]}
     select opt in "${profiles[@]}"
@@ -13,7 +13,7 @@ aws_select() {
         elif [[ $REPLY == "q" ]]
         then
             break
-        elif [[ $REPLY == ($length - 1) ]]
+        elif [[ $REPLY == $((length - 1)) ]]
         then
             unset AWS_PROFILE
             break

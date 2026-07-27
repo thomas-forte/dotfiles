@@ -12,11 +12,12 @@ optional_installs() {
 }
 
 setup_links() {
-    ln -s "$(pwd)/zsh/.zshenv" ~/.zshenv
-    ln -s "$(pwd)/zsh" ~/.config/zsh
-    ln -s "$(pwd)/git/config" ~/.config/git/config
-    ln -s "$(pwd)/bat.conf" ~/.config/bat.conf
-    ln -s "$(pwd)/sendssh/data" ~/.local/share/sendssh/data
+    mkdir -p ~/.config/git ~/.local/share/sendssh
+    ln -sfn "$(pwd)/zsh/.zshenv" ~/.zshenv
+    ln -sfn "$(pwd)/zsh" ~/.config/zsh
+    ln -sfn "$(pwd)/git/config" ~/.config/git/config
+    ln -sfn "$(pwd)/bat.conf" ~/.config/bat.conf
+    ln -sfn "$(pwd)/sendssh/data" ~/.local/share/sendssh/data
 }
 
 echo "================================================"
@@ -30,7 +31,7 @@ echo "Do you wish to continue to the download and install?"
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) installs; break;;
-        No ) exit;;
+        No ) break;;
     esac
 done
 
@@ -38,7 +39,7 @@ echo "Do you wish to continue to the optional installs?"
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) optional_installs; break;;
-        No ) exit;;
+        No ) break;;
     esac
 done
 
@@ -46,6 +47,6 @@ echo "Do you wish to continue to the setup of symlinks?"
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) setup_links; break;;
-        No ) exit;;
+        No ) break;;
     esac
 done

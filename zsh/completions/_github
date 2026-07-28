@@ -1,0 +1,4 @@
+#compdef github
+
+# Directories under ~/github only (single group — not cwd, not _files' dual tags).
+_directories -W "${HOME}/github"

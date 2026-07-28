@@ -1,0 +1,25 @@
+#compdef aws_select
+
+_aws_select() {
+  local -a profiles
+  # Prefer the shared helper from lib/aws.zsh when available
+  if (( $+functions[_aws_select_profiles] )); then
+    profiles=("${(@f)$(_aws_select_profiles)}")
+  elif [[ -r ~/.aws/config ]]; then
+    local line
+    while IFS= read -r line; do
+      if [[ "$line" == '[default]' ]]; then
+        profiles+=default
+      elif [[ "$line" =~ '^\[profile (.+)\]$' ]]; then
+        profiles+=("$match[1]")
+      fi
+    done < ~/.aws/config
+  fi
+
+  _arguments -S \
+    '(-h --help)'{-h,--help}'[show usage]' \
+    '(-u --unset)'{-u,--unset}'[unset AWS_PROFILE]' \
+    '1:profile:compadd -a profiles'
+}
+
+_aws_select "$@"

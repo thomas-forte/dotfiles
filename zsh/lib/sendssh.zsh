@@ -3,8 +3,8 @@
 # sendssh - share ssh public keys through a central server.
 #
 # Configured in .zshenv:
-#   SEND_SSH     - host holding the shared key list
-#   SEND_SSH_ID  - identity file used to reach that host
+#   SEND_SSH      - host holding the shared key list
+#   SEND_SSH_ID   - identity file used to reach that host
 #   SEND_SSH_USER - user to reach that host
 
 SENDSSH_REMOTE_FILE="/etc/sendssh/data"
@@ -96,7 +96,7 @@ _sendssh_pick_pubs() {
   fi
 
   echo "$1" >&2
-  idx=("${(f)$(_sendssh_select $flags "${pubs[@]:t}")}") || return 1
+  idx=("${(f)$(_picker $flags "${pubs[@]:t}")}") || return 1
   idx=(${idx:#})
 
   local i
@@ -139,7 +139,7 @@ _sendssh_get() {
 
   echo "select keys to add to ${SENDSSH_LOCAL_FILE}"
   local -a idx
-  idx=("${(f)$(_sendssh_select "${labels[@]}")}") || return 1
+  idx=("${(f)$(_picker "${labels[@]}")}") || return 1
   idx=(${idx:#})
   if (( $#idx == 0 )); then
     echo "nothing selected"
@@ -186,70 +186,4 @@ _sendssh_sync_authorized() {
   done < "${SENDSSH_LOCAL_FILE}"
   (( added )) && echo "authorized ${added} key(s) in ${auth}"
   return 0
-}
-
-# Interactive checkbox picker over the given labels, prints the selected
-# indices (1-based, one per line) to stdout.
-# Controls: arrows or j/k to move, space to toggle, enter to confirm, q to cancel.
-# Pass -1 as the first arg for single-choice mode: no checkboxes, and
-# space or enter picks the highlighted row.
-_sendssh_select() {
-  local single=0
-  if [[ "$1" == "-1" ]]; then
-    single=1
-    shift
-  fi
-
-  local -a opts=("$@") marks=()
-  local cur=1 i key
-  for i in {1..$#opts}; do marks[i]=0; done
-
-  print -n '\e[?25l' > /dev/tty
-  _sendssh_draw
-  while true; do
-    read -sk1 key < /dev/tty
-    if [[ "$key" == $'\e' ]]; then
-      read -sk2 key < /dev/tty
-      case "$key" in
-        '[A') key=k ;;
-        '[B') key=j ;;
-      esac
-    fi
-    case "$key" in
-      k) (( cur > 1 )) && (( cur-- )) ;;
-      j) (( cur < $#opts )) && (( cur++ )) ;;
-      ' ')
-        if (( single )); then
-          marks[cur]=1
-          break
-        fi
-        (( marks[cur] = ! marks[cur] ))
-        ;;
-      $'\n'|$'\r')
-        (( single )) && marks[cur]=1
-        break
-        ;;
-      q) print -n '\e[?25h' > /dev/tty; return 1 ;;
-    esac
-    print -n "\e[${#opts}A" > /dev/tty
-    _sendssh_draw
-  done
-  print -n '\e[?25h' > /dev/tty
-
-  for i in {1..$#opts}; do
-    (( marks[i] )) && print -r -- "$i"
-  done
-  return 0
-}
-
-# renders the picker, relies on zsh dynamic scoping for opts/marks/cur/single
-_sendssh_draw() {
-  local i box ptr
-  for i in {1..$#opts}; do
-    box="[ ] "; ptr="  "
-    (( single )) && box=""
-    (( marks[i] )) && box="[x] "
-    (( i == cur )) && ptr="> "
-    print -r -- $'\e[2K'"${ptr}${box}${opts[i]}" > /dev/tty
-  done
 }

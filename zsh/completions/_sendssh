@@ -1,0 +1,38 @@
+#compdef sendssh
+
+_sendssh() {
+  local -a commands
+  commands=(
+    'new:create an ed25519 key at ~/.ssh/<hostname>_<name>_ed25519'
+    'send:upload local public keys to $SEND_SSH'
+    'get:pull shared public keys into the local data file'
+    'copy:copy a local public key to the clipboard'
+  )
+
+  local curcontext="$curcontext" state state_descr line
+  typeset -A opt_args
+
+  _arguments -C \
+    '1: :->command' \
+    '*:: :->args'
+
+  case "$state" in
+    command)
+      _describe -t commands 'sendssh command' commands
+      ;;
+    args)
+      case "$words[1]" in
+        new)
+          _arguments \
+            '(-s --send)'{-s,--send}'[upload the public key after creating it]' \
+            '1:key name:'
+          ;;
+        send|get|copy)
+          # no further arguments
+          ;;
+      esac
+      ;;
+  esac
+}
+
+_sendssh "$@"

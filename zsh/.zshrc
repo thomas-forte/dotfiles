@@ -24,6 +24,7 @@ fi
 
 # Workflow libs (aliases + functions; may register completers via compdef)
 if [[ -d "${ZDOTDIR}/lib" ]]; then
+  source "${ZDOTDIR}/lib/picker.zsh"
   source "${ZDOTDIR}/lib/general.zsh"
   source "${ZDOTDIR}/lib/directories.zsh"
   source "${ZDOTDIR}/lib/git.zsh"

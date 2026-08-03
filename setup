@@ -1,52 +1,83 @@
 #!/bin/zsh
 
-installs() {
+# Repo-root relative so ./setup works before ZDOTDIR is linked.
+source "${0:A:h}/zsh/lib/picker.zsh"
+
+macos_installs() {
+    echo "Installing core tools via Homebrew:"
+    echo "  - font-fira-code-nerd-font (terminal/ligature font for starship)"
+    echo "  - bat (syntax-highlighted cat)"
+    echo "  - starship (prompt)"
+    echo "  - tmux (terminal multiplexer)"
     brew install --cask font-fira-code-nerd-font
     brew install bat starship tmux
 }
 
-optional_installs() {
+macos_optional_installs() {
+    echo "Installing optional tools via Homebrew:"
+    echo "  - session-manager-plugin (AWS SSM sessions)"
+    echo "  - awscli, curl, fish, imagemagick, nvm, python3, redis, tmux, wget"
+    echo "  - gpg2, gnupg, pinentry-mac (commit signing)"
     brew install --cask session-manager-plugin
     brew install awscli curl fish imagemagick nvm python3 redis tmux wget
     brew install gpg2 gnupg pinentry-mac
 }
 
+fedora_installs() {
+    echo "Installing core tools via dnf:"
+    echo "  - font-fira-code-nerd-font (terminal/ligature font for starship)"
+    echo "  - bat (syntax-highlighted cat)"
+    echo "  - starship (prompt)"
+    echo "  - tmux (terminal multiplexer)"
+    dnf install font-fira-code-nerd-font bat starship tmux
+}
+
 setup_links() {
+    echo "Creating config directories and symlinking repo files into XDG paths..."
     mkdir -p ~/.config/git ~/.local/share/sendssh
     ln -sfn "$(pwd)/zsh/.zshenv" ~/.zshenv
     ln -sfn "$(pwd)/zsh" ~/.config/zsh
     ln -sfn "$(pwd)/config/git.config" ~/.config/git/config
     ln -sfn "$(pwd)/config/bat.config" ~/.config/bat.conf
     ln -sfn "$(pwd)/sendssh/data" ~/.local/share/sendssh/data
+    echo "Symlinks created."
 }
 
 echo "================================================"
-echo "= This script will download and install some   ="
-echo "= cool stuff and create symlinks for your      ="
-echo "= dotfiles in this repo.                       ="
+echo "= This script will optionally install packages ="
+echo "= and create symlinks for the dotfiles in this ="
+echo "= repo.                                        ="
 echo "================================================"
+echo
 
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    if confirm "Install core Homebrew packages (font, bat, starship, tmux)?"; then
+        macos_installs
+    else
+        echo "Skipping core Homebrew installs."
+    fi
+    echo
 
-echo "Do you wish to continue to the download and install?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes ) installs; break;;
-        No ) break;;
-    esac
-done
+    if confirm "Install optional Homebrew packages (AWS, gpg, nvm, etc.)?"; then
+        macos_optional_installs
+    else
+        echo "Skipping optional Homebrew installs."
+    fi
+    echo
+elif [[ "$(uname -s)" == "Linux" ]] && [[ "$(. /etc/os-release 2>/dev/null; echo $ID)" == "fedora" ]]; then
+    if confirm "Install core Fedora packages (font, bat, starship, tmux)?"; then
+        fedora_installs
+    else
+        echo "Skipping core Fedora installs."
+    fi
+    echo
+else
+    echo "Unknown OS — skipping package install steps."
+    echo
+fi
 
-echo "Do you wish to continue to the optional installs?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes ) optional_installs; break;;
-        No ) break;;
-    esac
-done
-
-echo "Do you wish to continue to the setup of symlinks?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes ) setup_links; break;;
-        No ) break;;
-    esac
-done
+if confirm "Create/update symlinks for zsh, git, bat, and sendssh?"; then
+    setup_links
+else
+    echo "Skipping symlink setup."
+fi

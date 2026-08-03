@@ -1,12 +1,21 @@
 #!/bin/zsh
 #
-# Interactive terminal pickers.
+# Interactive terminal pickers / prompts.
 #
+#   confirm "question?"        [y/N]; true only for y/yes (any case)
 #   _picker LABEL...           multi-select checkboxes; prints 1-based indices
 #   _picker -1 LABEL...        single-select; prints one 1-based index
 #
-# Controls: arrows or j/k move, space toggles (multi) or chooses (single),
+# Picker controls: arrows or j/k move, space toggles (multi) or chooses (single),
 # enter confirms, q or Esc cancels (returns 1). UI goes to /dev/tty; results on stdout.
+
+# Confirm [y/N]. Empty / anything else = no. y/yes (any case) = yes.
+confirm() {
+  local reply
+  print -n -- "$1 [y/N] "
+  read -r reply
+  [[ "${reply:l}" == y || "${reply:l}" == yes ]]
+}
 
 _picker() {
   local single=0

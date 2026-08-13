@@ -26,6 +26,7 @@ fi
 if [[ -d "${ZDOTDIR}/lib" ]]; then
   source "${ZDOTDIR}/lib/picker.zsh"
   source "${ZDOTDIR}/lib/general.zsh"
+  source "${ZDOTDIR}/lib/update.zsh"
   source "${ZDOTDIR}/lib/directories.zsh"
   source "${ZDOTDIR}/lib/git.zsh"
   source "${ZDOTDIR}/lib/python.zsh"

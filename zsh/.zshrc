@@ -64,7 +64,11 @@ fi
 
 # Configure nvm
 export NVM_DIR="$XDG_DATA_HOME/nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+if [[ -s /opt/homebrew/opt/nvm/nvm.sh ]]; then
+  . /opt/homebrew/opt/nvm/nvm.sh
+elif [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  . "$NVM_DIR/nvm.sh"
+fi
 
 # add starship to shell
 if hash starship 2> /dev/null; then

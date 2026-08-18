@@ -16,20 +16,52 @@ macos_installs() {
 macos_optional_installs() {
     echo "Installing optional tools via Homebrew:"
     echo "  - session-manager-plugin (AWS SSM sessions)"
-    echo "  - awscli, curl, fish, imagemagick, nvm, python3, redis, tmux, wget"
+    echo "  - awscli, curl, fish, imagemagick, nvm, python3, wget"
     echo "  - gpg2, gnupg, pinentry-mac (commit signing)"
     brew install --cask session-manager-plugin
-    brew install awscli curl fish imagemagick nvm python3 redis tmux wget
+    brew install awscli curl fish imagemagick nvm python3 wget
     brew install gpg2 gnupg pinentry-mac
 }
 
 fedora_installs() {
     echo "Installing core tools via dnf:"
-    echo "  - font-fira-code-nerd-font (terminal/ligature font for starship)"
     echo "  - bat (syntax-highlighted cat)"
     echo "  - starship (prompt)"
     echo "  - tmux (terminal multiplexer)"
-    dnf install font-fira-code-nerd-font bat starship tmux
+    sudo dnf install bat starship tmux
+}
+
+fedora_optional_installs() {
+    echo "Installing optional tools via dnf:"
+    # echo "  - session-manager-plugin (AWS SSM sessions)"
+    echo "  - awscli, curl, fish, imagemagick, python3, wget"
+    echo "  - gnupg (commit signing)"
+    echo "Install optional tools via curl:"
+    echo "  - nvm (node version manager)"
+    # sudo dnf install -y https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm
+    sudo dnf install awscli curl fish ImageMagick python3 wget
+    sudo dnf install gnupg
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.6/install.sh | bash
+}
+
+debian_installs() {
+    echo "Installing core tools via apt:"
+    echo "  - bat (syntax-highlighted cat)"
+    echo "  - starship (prompt)"
+    echo "  - tmux (terminal multiplexer)"
+    sudo apt-get update
+    sudo apt-get install -y bat tmux curl starship
+}
+
+debian_optional_installs() {
+    echo "Installing optional tools via apt:"
+    # echo "  - session-manager-plugin (AWS SSM sessions)"
+    echo "  - awscli, curl, fish, imagemagick, python3, wget"
+    echo "  - gnupg (commit signing)"
+    echo "Install optional tools via curl:"
+    echo "  - nvm (node version manager)"
+    sudo apt-get install -y awscli curl fish imagemagick python3 wget gnupg
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.6/install.sh | bash 
 }
 
 setup_links() {
@@ -41,6 +73,18 @@ setup_links() {
     ln -sfn "$(pwd)/config/bat.config" ~/.config/bat.conf
     ln -sfn "$(pwd)/sendssh/data" ~/.local/share/sendssh/data
     echo "Symlinks created."
+}
+
+_os_id() {
+    [[ -r /etc/os-release ]] || return 1
+    . /etc/os-release 2>/dev/null
+    print -r -- "${ID:-}"
+}
+
+_os_like() {
+    [[ -r /etc/os-release ]] || return 1
+    . /etc/os-release 2>/dev/null
+    print -r -- "${ID_LIKE:-}"
 }
 
 echo "================================================"
@@ -64,13 +108,45 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
         echo "Skipping optional Homebrew installs."
     fi
     echo
-elif [[ "$(uname -s)" == "Linux" ]] && [[ "$(. /etc/os-release 2>/dev/null; echo $ID)" == "fedora" ]]; then
-    if confirm "Install core Fedora packages (font, bat, starship, tmux)?"; then
-        fedora_installs
-    else
-        echo "Skipping core Fedora installs."
-    fi
-    echo
+elif [[ "$(uname -s)" == "Linux" ]]; then
+    linux_id="$(_os_id)"
+    linux_like="$(_os_like)"
+    case " ${linux_id} ${linux_like} " in
+        *" fedora "*)
+            if confirm "Install core Fedora packages (font, bat, starship, tmux)?"; then
+                fedora_installs
+            else
+                echo "Skipping core Fedora installs."
+            fi
+            echo
+
+            if confirm "Install optional Fedora packages (AWS, gpg, nvm, etc.)?"; then
+                fedora_optional_installs
+            else
+                echo "Skipping optional Fedora installs."
+            fi
+            echo
+            ;;
+        *" debian "*|*" ubuntu "*)
+            if confirm "Install core Debian/Ubuntu packages (font, bat, starship, tmux)?"; then
+                debian_installs
+            else
+                echo "Skipping core Debian/Ubuntu installs."
+            fi
+            echo
+
+            if confirm "Install optional Debian/Ubuntu packages (AWS, gpg, nvm, etc.)?"; then
+                debian_optional_installs
+            else
+                echo "Skipping optional Debian/Ubuntu installs."
+            fi
+            echo
+            ;;
+        *)
+            echo "Unknown Linux distro (${linux_id:-unknown}) — skipping package install steps."
+            echo
+            ;;
+    esac
 else
     echo "Unknown OS — skipping package install steps."
     echo

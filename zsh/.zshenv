@@ -17,7 +17,6 @@ export PAGER="less"
 # shell configs
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh";
 export ADOTDIR="${ZDOTDIR}/antigen"
-export STARSHIP_CONFIG="${ZDOTDIR}/starship.toml"
 
 # app config
 export LESSHISTFILE="-" # Disable less history.

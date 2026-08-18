@@ -71,6 +71,7 @@ setup_links() {
     ln -sfn "$(pwd)/zsh" ~/.config/zsh
     ln -sfn "$(pwd)/config/git.config" ~/.config/git/config
     ln -sfn "$(pwd)/config/bat.config" ~/.config/bat.conf
+    ln -sfn "$(pwd)/config/starship.toml" ~/.config/starship.toml
     ln -sfn "$(pwd)/sendssh/data" ~/.local/share/sendssh/data
     echo "Symlinks created."
 }

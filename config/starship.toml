@@ -21,9 +21,15 @@ $character"""
 
 [username]
 format = '[$user]($style)'
+style_root = 'bold red'
+style_user = 'dimmed cyan'
 
 [hostname]
-format = '@[$hostname]($style)'
+format = '[[@](dimmed white)$hostname[:](dimmed white)]($style)'
+style = 'dimmed cyan'
+
+[directory]
+style = 'bold cyan'
 
 [sudo]
 disabled = false
@@ -42,3 +48,10 @@ format = '[(\($virtualenv\) )]($style)'
 [nodejs]
 format = '[\(($version)\) ]($style)'
 version_format = 'v${major}.${minor}'
+
+[battery]
+disabled = true
+
+[cmd_duration]
+disabled = true
+

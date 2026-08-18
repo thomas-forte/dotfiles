@@ -74,7 +74,6 @@ if hash starship 2> /dev/null; then
   eval "$(starship init zsh)"
 fi
 
-export CLICOLOR=1
 export GPG_TTY=$(tty)
 
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"

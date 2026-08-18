@@ -66,10 +66,11 @@ debian_optional_installs() {
 
 setup_links() {
     echo "Creating config directories and symlinking repo files into XDG paths..."
-    mkdir -p ~/.config/git ~/.local/share/sendssh ~/.local/share/nvm
+    mkdir -p ~/.config/npm ~/.local/share/sendssh ~/.local/share/nvm
     ln -sfn "$(pwd)/zsh/.zshenv" ~/.zshenv
     ln -sfn "$(pwd)/zsh" ~/.config/zsh
-    ln -sfn "$(pwd)/config/git.config" ~/.config/git/config
+    ln -sfn "$(pwd)/config/git" ~/.config/git
+    ln -sfn "$(pwd)/config/npm.config" ~/.config/npm/config
     ln -sfn "$(pwd)/config/bat.config" ~/.config/bat.conf
     ln -sfn "$(pwd)/config/starship.toml" ~/.config/starship.toml
     ln -sfn "$(pwd)/config/wgetrc.config" ~/.config/.wgetrc
@@ -154,7 +155,7 @@ else
     echo
 fi
 
-if confirm "Create/update symlinks for zsh, git, bat, and sendssh?"; then
+if confirm "Create/update symlinks?"; then
     setup_links
 else
     echo "Skipping symlink setup."

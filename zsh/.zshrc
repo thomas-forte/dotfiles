@@ -63,7 +63,6 @@ if [[ -f "${ZDOTDIR}/lib/history.zsh" ]]; then
 fi
 
 # Configure nvm
-export NVM_DIR="$XDG_DATA_HOME/nvm"
 if [[ -s /opt/homebrew/opt/nvm/nvm.sh ]]; then
   . /opt/homebrew/opt/nvm/nvm.sh
 elif [[ -s "$NVM_DIR/nvm.sh" ]]; then

@@ -24,6 +24,7 @@ export LESSHISTFILE="$XDG_STATE_HOME/lesshst"
 export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat.conf"
 export WGETRC="${XDG_CONFIG_HOME}/.wgetrc"
 export PYTHON_HISTORY="${XDG_CACHE_HOME}/.python_history"
+export NVM_DIR="$XDG_DATA_HOME/nvm"
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export SEND_SSH=""
 export SEND_SSH_USER=""

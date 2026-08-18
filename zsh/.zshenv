@@ -19,8 +19,11 @@ export ZDOTDIR="${XDG_CONFIG_HOME}/zsh";
 export ADOTDIR="${ZDOTDIR}/antigen"
 
 # app config
-export LESSHISTFILE="-" # Disable less history.
+# export LESSHISTFILE="-" # Disable less history.
+export LESSHISTFILE="$XDG_STATE_HOME/lesshst"
 export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat.conf"
+export WGETRC="${XDG_CONFIG_HOME}/.wgetrc"
+export PYTHON_HISTORY="${XDG_CACHE_HOME}/.python_history"
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export SEND_SSH=""
 export SEND_SSH_USER=""

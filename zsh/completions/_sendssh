@@ -6,7 +6,8 @@ _sendssh() {
     'new:create an ed25519 key at ~/.ssh/<hostname>_<name>_ed25519'
     'send:upload local public keys to $SEND_SSH'
     'get:pull shared public keys into the local data file'
-    'copy:copy a local public key to the clipboard'
+    'list:show local data-file keys and whether they are authorized'
+    'copy:copy a public key to the clipboard (local, or remote with -r)'
   )
 
   local curcontext="$curcontext" state state_descr line
@@ -27,8 +28,9 @@ _sendssh() {
             '(-s --send)'{-s,--send}'[upload the public key after creating it]' \
             '1:key name:'
           ;;
-        send|get|copy)
-          # no further arguments
+        copy)
+          _arguments \
+            '(-r --remote)'{-r,--remote}'[copy a key from the remote server]'
           ;;
       esac
       ;;

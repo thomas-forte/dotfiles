@@ -34,9 +34,9 @@ export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm"
 
 
 # SendSSH configs
-export SEND_SSH=""
-export SEND_SSH_USER=""
-export SEND_SSH_ID=""
+export SEND_SSH_DEST="sendssh"
+export SEND_SSH_USER="sendssh"
+export SEND_SSH_ID="~/.ssh/key"
 
 # Other variables
 export DOTNET_CLI_TELEMETRY_OPTOUT=1

@@ -66,7 +66,7 @@ debian_optional_installs() {
 
 setup_links() {
     echo "Creating config directories and symlinking repo files into XDG paths..."
-    mkdir -p ~/.config/git ~/.local/share/sendssh
+    mkdir -p ~/.config/git ~/.local/share/sendssh ~/.local/share/nvm
     ln -sfn "$(pwd)/zsh/.zshenv" ~/.zshenv
     ln -sfn "$(pwd)/zsh" ~/.config/zsh
     ln -sfn "$(pwd)/config/git.config" ~/.config/git/config

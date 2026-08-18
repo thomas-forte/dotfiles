@@ -26,6 +26,13 @@ mkcd() {
 }
 
 # List directory contents
+
+# Enable color support for GNU ls, BSD ls is colored by CLICOLOR=1
+if [[ "$(uname -s)" == "Linux" ]]; then
+  [[ -x /usr/bin/dircolors ]] && eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+fi 
+
 alias l='ls'
 alias ll='ls -lha' # List all files with detailed info
 alias lr='ls -R' # List files in sub-directories, recursively

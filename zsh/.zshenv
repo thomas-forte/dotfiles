@@ -15,7 +15,6 @@ export LANG='en_US.UTF-8'
 export TZ='America/New_York'
 export EDITOR="nano"
 export PAGER="less"
-export CLICOLOR=1
 
 # Zsh
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"

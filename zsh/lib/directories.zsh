@@ -31,7 +31,9 @@ mkcd() {
 if [[ "$(uname -s)" == "Linux" ]]; then
   [[ -x /usr/bin/dircolors ]] && eval "$(dircolors -b)"
   alias ls='ls --color=auto'
-fi 
+elif [[ "$(uname -s)" == "Darwin" ]]; then
+  export CLICOLOR=1
+fi
 
 alias l='ls'
 alias ll='ls -lha' # List all files with detailed info

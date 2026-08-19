@@ -1,0 +1,8 @@
+#compdef mkcd
+
+_mkcd() {
+  _arguments \
+    '1:directory:_directories'
+}
+
+_mkcd "$@"

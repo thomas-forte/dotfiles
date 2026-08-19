@@ -1,54 +1,41 @@
 #!/bin/zsh
+#
+# Interactive shells only (Cursor, Konsole, iTerm, `ssh host`).
+# Scripts and `ssh host cmd` never load this file.
 
-# If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# OSX specific configurations
-if [ "$(uname -s)" = "Darwin" ]; then
-
-  # Add Brew to path, if it's installed
-  if [[ -d /opt/homebrew/bin ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  fi
-
-  # If using iTerm, import the shell integration if available
-  if [[ -f "${ZDOTDIR}/.iterm2_shell_integration.zsh" ]]; then
-    source "${ZDOTDIR}/.iterm2_shell_integration.zsh"
-  fi
+# --- plugin manager -----------------------------------------------------------
+if [[ -f "${ZDOTDIR}/lib/antigen.zsh" ]]; then
+  source "${ZDOTDIR}/lib/antigen.zsh"
 fi
 
-# Antigen first so workflow libs can use deferred `compdef`
-if [[ -d "${ZDOTDIR}/plugins" ]]; then
-  source "${ZDOTDIR}/plugins/setup-antigen.zsh"
-fi
-
-# Workflow libs (aliases + functions; may register completers via compdef)
+# --- options + modules --------------------------------------------------------
+# lib/ = startup modules (setopt, aliases, functions). Order matters.
 if [[ -d "${ZDOTDIR}/lib" ]]; then
-  source "${ZDOTDIR}/lib/picker.zsh"
+  source "${ZDOTDIR}/lib/history.zsh"      # HISTFILE, setopt
+  source "${ZDOTDIR}/lib/picker.zsh"       # confirm, _picker (used by update/aws/sendssh)
+  source "${ZDOTDIR}/lib/directories.zsh"  # cd options, ls aliases
   source "${ZDOTDIR}/lib/general.zsh"
-  source "${ZDOTDIR}/lib/update.zsh"
-  source "${ZDOTDIR}/lib/directories.zsh"
   source "${ZDOTDIR}/lib/git.zsh"
   source "${ZDOTDIR}/lib/python.zsh"
   source "${ZDOTDIR}/lib/aws.zsh"
   source "${ZDOTDIR}/lib/sendssh.zsh"
+  source "${ZDOTDIR}/lib/update.zsh"
 fi
 
-# Register antigen bundles (apply comes after completion policy)
-if [[ -d "${ZDOTDIR}/plugins" ]]; then
-  source "${ZDOTDIR}/plugins/import-plugins.zsh"
+# --- antigen bundles ----------------------------------------------------------
+if [[ -f "${ZDOTDIR}/lib/antigen-bundles.zsh" ]]; then
+  source "${ZDOTDIR}/lib/antigen-bundles.zsh"
 fi
 
-# Completion policy (fpath extras + zstyle), then apply + one compinit
+# --- completions (after bundles, before compinit) -----------------------------
 if [[ -f "${ZDOTDIR}/lib/completions.zsh" ]]; then
   source "${ZDOTDIR}/lib/completions.zsh"
 fi
 
-# Load any non-cached antigen work (deferred compdefs, etc.)
 (( $+functions[antigen] )) && antigen apply
 
-# Own a single compinit now that fpath is final.
-# Antigen zcache otherwise defers this to precmd with a hardcoded dump path.
 autoload -Uz add-zsh-hook compinit
 add-zsh-hook -D precmd _antigen_compinit 2>/dev/null
 if [[ -n "${ANTIGEN_COMPDUMP:-}" ]]; then
@@ -57,23 +44,26 @@ else
   compinit
 fi
 
-# History after completions — unrelated, but keeps lib sourcing intentional
-if [[ -f "${ZDOTDIR}/lib/history.zsh" ]]; then
-  source "${ZDOTDIR}/lib/history.zsh"
+# --- PATH (interactive only; macOS brew + cargo + nvm) ------------------------
+if [[ "$(uname -s)" == Darwin && -d /opt/homebrew/bin ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Configure nvm
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+
 if [[ -s /opt/homebrew/opt/nvm/nvm.sh ]]; then
   . /opt/homebrew/opt/nvm/nvm.sh
 elif [[ -s "$NVM_DIR/nvm.sh" ]]; then
   . "$NVM_DIR/nvm.sh"
 fi
 
-# add starship to shell
+# --- prompt + terminal --------------------------------------------------------
 if hash starship 2> /dev/null; then
   eval "$(starship init zsh)"
 fi
 
-export GPG_TTY=$(tty)
+if [[ "$(uname -s)" == Darwin && -f "${ZDOTDIR}/.iterm2_shell_integration.zsh" ]]; then
+  source "${ZDOTDIR}/.iterm2_shell_integration.zsh"
+fi
 
-[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+export GPG_TTY=$(tty)

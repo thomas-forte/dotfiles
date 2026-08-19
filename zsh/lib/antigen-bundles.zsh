@@ -1,3 +1,5 @@
+#!/bin/zsh
+#
 # Bundle registration only — `.zshrc` runs `antigen apply` and a single
 # `compinit` after lib/completions.zsh so fpath/zstyle are final.
 # Keep syntax-highlighting last among bundles (zle widget ordering).

@@ -23,6 +23,8 @@ _github_repos() {
 
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
+alias gfp='gfa && git pull'
+alias gsp='git stash --include-untracked && gfp && git stash pop'
 alias gcm='git checkout $(git_main_branch)'
 alias gcb='git checkout -b'
 alias gcB='git checkout -B'

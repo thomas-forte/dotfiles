@@ -1,0 +1,20 @@
+#compdef py
+
+_py() {
+  local action
+
+  if (( ${+VIRTUAL_ENV} )); then
+    action="deactivate ${VIRTUAL_ENV:t}"
+  elif [[ -d venv ]]; then
+    action='activate ./venv'
+  elif [[ -d .venv ]]; then
+    action='activate ./.venv'
+  else
+    action='no venv/ or .venv/ here -- python3 -m venv .venv'
+  fi
+
+  # _message only — do not use _describe; hint entries get inserted into the line
+  _message -r "to activate or not to activate, that is the question -- ${action}"
+}
+
+_py "$@"

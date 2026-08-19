@@ -8,10 +8,6 @@ py () {
   elif [[ -d .venv ]]; then
     source .venv/bin/activate
   else
-    echo "I only work with venv and .venv!"
+    echo "no venv/ or .venv/ here — try: python3 -m venv .venv"
   fi
-}
-
-_py() {
-  "to activate or not to activate, that is the question..."
 }

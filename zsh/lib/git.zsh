@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-# my favorite aliases that I got from ohmyzsh
-
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local ref
@@ -12,9 +10,15 @@ function git_main_branch() {
     fi
   done
 
-  # If no main branch was found, fall back to master but return error
   echo master
   return 1
+}
+
+_github_repos() {
+  local d
+  for d in ${HOME}/github/*(N/); do
+    print -r -- "${d:t}"
+  done
 }
 
 alias gf='git fetch'
@@ -22,7 +26,6 @@ alias gfa='git fetch --all --prune'
 alias gcm='git checkout $(git_main_branch)'
 alias gcb='git checkout -b'
 alias gcB='git checkout -B'
-
 alias gcl='git clone --recurse-submodules'
 
 function github() {
@@ -32,5 +35,3 @@ function github() {
     cd "$HOME/github" || return
   fi
 }
-
-alias work="cd $HOME/github/_work"

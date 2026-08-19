@@ -12,7 +12,6 @@ export XDG_CACHE_HOME="${HOME}/.cache"
 
 # Locale, timezone, basics
 export LANG='en_US.UTF-8'
-export LC_ALL='C'
 export TZ='America/New_York'
 export EDITOR="nano"
 export PAGER="less"

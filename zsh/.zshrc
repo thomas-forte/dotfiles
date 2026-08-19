@@ -44,6 +44,9 @@ else
   compinit
 fi
 
+# git aliases in lib/git.zsh — compdef needs _git from compinit first
+compdef git gf gfa gcm gcb gcB gcl
+
 # --- PATH (interactive only; macOS brew + cargo + nvm) ------------------------
 if [[ "$(uname -s)" == Darwin && -d /opt/homebrew/bin ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"

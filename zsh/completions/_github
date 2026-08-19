@@ -1,4 +1,26 @@
 #compdef github
 
-# Directories under ~/github only (single group — not cwd, not _files' dual tags).
-_directories -W "${HOME}/github"
+_github() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  local -a repos
+  if (( $+functions[_github_repos] )); then
+    repos=("${(@f)$(_github_repos)}")
+  else
+    repos=(${~${HOME}/github/*}(N/))
+    repos=(${repos:t})
+  fi
+
+  _arguments -C \
+    '1:repository:->repo' \
+    && return 0
+
+  case $state in
+    repo)
+      _describe -t repositories 'repository under ~/github' repos
+      ;;
+  esac
+}
+
+_github "$@"

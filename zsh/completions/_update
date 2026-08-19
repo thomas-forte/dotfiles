@@ -1,0 +1,9 @@
+#compdef update uupdate
+
+_update() {
+  _arguments -S \
+    '(-h --help)'{-h,--help}'[show usage]' \
+    '(-a --accept)'{-a,--accept}'[skip confirmation; non-interactive upgrade]'
+}
+
+_update "$@"
